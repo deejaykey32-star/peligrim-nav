@@ -521,6 +521,12 @@ button:disabled {
   text-decoration: none;
 }
 
+.nav-hud-comaps {
+  background-color: #37653f;
+  border-color: #86efac;
+  text-decoration: none;
+}
+
 .nav-hud-stop {
   background-color: #b91c1c;
   border-color: #fca5a5;
@@ -1069,6 +1075,18 @@ button:disabled {
   flex-shrink: 0;
 }
 
+.comaps-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background-color: #37653f;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 .waze-title {
   margin: 0;
   font-size: 0.88rem;
@@ -1167,8 +1185,34 @@ button:disabled {
   transition: background-color 150ms ease, transform 120ms ease;
 }
 
-.waze-cta-row .btn-waze {
-  flex: 1 1 auto;
+.btn-comaps {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 14px;
+  background-color: #37653f;
+  color: #ffffff;
+  border: 1px solid #37653f;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 150ms ease, transform 120ms ease;
+}
+
+.waze-cta-row .btn-waze,
+.waze-cta-row .btn-comaps {
+  flex: 1 1 calc(50% - 4px);
+  min-width: 140px;
+}
+
+.waze-cta-row .btn-secondary {
+  flex: 1 1 calc(50% - 4px);
+  min-width: 140px;
 }
 
 .btn-waze:hover {
@@ -1176,6 +1220,14 @@ button:disabled {
 }
 
 .btn-waze:active {
+  transform: scale(0.98);
+}
+
+.btn-comaps:hover {
+  background-color: #2b5032;
+}
+
+.btn-comaps:active {
   transform: scale(0.98);
 }
 

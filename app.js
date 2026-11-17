@@ -50,6 +50,7 @@
       mode: 'next_poi', // 'next_poi' | 'day_end' | 'approach'
       waypointIndex: 0,
       currentUrl: 'https://www.waze.com/ul?navigate=yes',
+      comapsUrl: 'https://comaps.at/route',
       lastSyncedTargetName: ''
     },
     tracker: {
@@ -111,6 +112,7 @@
     iconVoiceOn: document.getElementById('icon-voice-on'),
     iconVoiceOff: document.getElementById('icon-voice-off'),
     hudWazeLink: document.getElementById('link-hud-waze'),
+    hudCoMapsLink: document.getElementById('link-hud-comaps'),
     stopNavBtn: document.getElementById('btn-stop-nav'),
     layerSwitch: document.getElementById('map-layer-switch'),
     layerOsmBtn: document.getElementById('btn-layer-osm'),
@@ -155,7 +157,9 @@
     wazePrevBtn: document.getElementById('btn-waze-prev'),
     wazeNextBtn: document.getElementById('btn-waze-next'),
     wazeOpenLink: document.getElementById('link-waze-open'),
+    comapsOpenLink: document.getElementById('link-comaps-open'),
     wazeCopyBtn: document.getElementById('btn-waze-copy'),
+    comapsCopyBtn: document.getElementById('btn-comaps-copy'),
     maneuversCount: document.getElementById('maneuvers-count'),
     maneuversList: document.getElementById('maneuvers-list'),
     trackerStateText: document.getElementById('tracker-state-text'),
@@ -177,6 +181,7 @@
     poiModalClose: document.getElementById('btn-poi-close'),
     poiModalLocate: document.getElementById('btn-poi-locate'),
     poiModalWazeLink: document.getElementById('link-poi-waze'),
+    poiModalCoMapsLink: document.getElementById('link-poi-comaps'),
     poiModalNext: document.getElementById('btn-poi-next'),
     menuModal: document.getElementById('menu-modal'),
     menuModalClose: document.getElementById('btn-menu-close'),
@@ -1876,6 +1881,9 @@ ${trkptsXml}
     if (els.poiModalWazeLink) {
       els.poiModalWazeLink.href = buildWazeUniversalUrl(poi.lat, poi.lng, STATE.userPosition);
     }
+    if (els.poiModalCoMapsLink) {
+      els.poiModalCoMapsLink.href = buildCoMapsUniversalUrl(poi.lat, poi.lng, poi.name, STATE.userPosition);
+    }
 
     els.poiModal.classList.remove('hidden');
     els.poiModalClose.focus();
@@ -2372,6 +2380,7 @@ ${tracksXml}
     els.wazePrevBtn.addEventListener('click', () => stepWazeWaypoint(-1));
     els.wazeNextBtn.addEventListener('click', () => stepWazeWaypoint(1));
     els.wazeCopyBtn.addEventListener('click', copyWazeLinkToClipboard);
+    if (els.comapsCopyBtn) els.comapsCopyBtn.addEventListener('click', copyCoMapsLinkToClipboard);
 
     els.voiceToggleBtn.addEventListener('click', () => {
       STATE.navigation.voiceEnabled = !STATE.navigation.voiceEnabled;
@@ -2502,6 +2511,20 @@ ${tracksXml}
       params.set('from', `${userPos.lat.toFixed(6)},${userPos.lng.toFixed(6)}`);
     }
     return `https://www.waze.com/ul?${params.toString()}`;
+  }
+
+  function buildCoMapsUniversalUrl(destLat, destLng, destName, userPos) {
+    const dName = destName || 'Cel';
+    const params = new URLSearchParams({
+      dll: `${Number(destLat).toFixed(6)},${Number(destLng).toFixed(6)}`,
+      daddr: dName,
+      type: 'pedestrian'
+    });
+    if (userPos && Number.isFinite(userPos.lat) && Number.isFinite(userPos.lng)) {
+      params.set('sll', `${Number(userPos.lat).toFixed(6)},${Number(userPos.lng).toFixed(6)}`);
+      params.set('saddr', 'Moja lokalizacja');
+    }
+    return `https://comaps.at/route?${params.toString()}`;
   }
 
   function getWazeSyncStopsForDay() {
@@ -2651,12 +2674,21 @@ ${tracksXml}
     }
 
     const wazeUrl = buildWazeUniversalUrl(target.lat, target.lng, STATE.userPosition);
+    const comapsUrl = buildCoMapsUniversalUrl(target.lat, target.lng, target.name, STATE.userPosition);
     STATE.waze.currentUrl = wazeUrl;
+    STATE.waze.comapsUrl = comapsUrl;
     STATE.waze.lastSyncedTargetName = target.name;
 
-    els.wazeOpenLink.href = wazeUrl;
-    els.hudWazeLink.href = wazeUrl;
-    els.hudWazeLink.title = `Prowadź w Waze do: ${target.name}`;
+    if (els.wazeOpenLink) els.wazeOpenLink.href = wazeUrl;
+    if (els.comapsOpenLink) els.comapsOpenLink.href = comapsUrl;
+    if (els.hudWazeLink) {
+      els.hudWazeLink.href = wazeUrl;
+      els.hudWazeLink.title = `Prowadź w Waze do: ${target.name}`;
+    }
+    if (els.hudCoMapsLink) {
+      els.hudCoMapsLink.href = comapsUrl;
+      els.hudCoMapsLink.title = `Prowadź w CoMaps (offline OSM) do: ${target.name}`;
+    }
 
     els.wazeTargetName.textContent = target.name;
     els.wazeStepCounter.textContent = target.stepLabel || target.kind;
@@ -2674,8 +2706,8 @@ ${tracksXml}
     }
 
     els.wazeSyncStatus.textContent = STATE.waze.autoSync
-      ? (STATE.userPosition ? 'Zsynchronizowano z GPS i bieżącym etapem' : 'Gotowy do synchronizacji z trasą')
-      : 'Ręczny wybór punktu docelowego dla Waze';
+      ? (STATE.userPosition ? 'Zsynchronizowano z GPS (Waze & CoMaps)' : 'Gotowy do synchronizacji z trasą')
+      : 'Ręczny wybór punktu docelowego (Waze & CoMaps)';
   }
 
   function setWazeMode(mode) {
@@ -2721,6 +2753,32 @@ ${tracksXml}
       }, 1800);
     } catch (_err) {
       els.wazeSyncStatus.textContent = 'Użyj przycisku „Prowadź w Waze”, aby otworzyć bezpośrednio.';
+    }
+  }
+
+  async function copyCoMapsLinkToClipboard() {
+    const url = STATE.waze.comapsUrl;
+    if (!url) return;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        const tmp = document.createElement('input');
+        tmp.value = url;
+        document.body.appendChild(tmp);
+        tmp.select();
+        document.execCommand('copy');
+        document.body.removeChild(tmp);
+      }
+      if (els.comapsCopyBtn) {
+        const prev = els.comapsCopyBtn.textContent;
+        els.comapsCopyBtn.textContent = 'Skopiowano link';
+        setTimeout(() => {
+          els.comapsCopyBtn.textContent = prev;
+        }, 1800);
+      }
+    } catch (_err) {
+      els.wazeSyncStatus.textContent = 'Użyj przycisku „Prowadź w CoMaps”, aby otworzyć bezpośrednio.';
     }
   }
 
