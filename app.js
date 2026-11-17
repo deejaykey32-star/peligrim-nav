@@ -1882,7 +1882,8 @@ ${trkptsXml}
       els.poiModalWazeLink.href = buildWazeUniversalUrl(poi.lat, poi.lng, STATE.userPosition);
     }
     if (els.poiModalCoMapsLink) {
-      els.poiModalCoMapsLink.href = buildCoMapsUniversalUrl(poi.lat, poi.lng, poi.name);
+      const poiComapsUrls = buildCoMapsUrls(poi.lat, poi.lng, poi.name);
+      applyCoMapsLink(els.poiModalCoMapsLink, poiComapsUrls);
     }
 
     els.poiModal.classList.remove('hidden');
@@ -2521,12 +2522,52 @@ ${tracksXml}
       .trim();
   }
 
-  function buildCoMapsUniversalUrl(destLat, destLng, destName) {
+  function buildCoMapsUrls(destLat, destLng, destName) {
     const lat = Number(destLat).toFixed(6);
     const lng = Number(destLng).toFixed(6);
     const cleanLabel = sanitizePointLabel(destName);
     const encoded = encodeURIComponent(cleanLabel);
-    return `https://comaps.at/${lat},${lng}/${encoded}`;
+
+    // Standard RFC 5870 Geo URI: handled by CoMaps and Organic Maps on Android as a location intent.
+    // Prevents CoMaps HTTP intent filter from mistakenly treating the URL as a file download ("typ pliku nie jest rozpoznawany").
+    const geoUrl = `geo:${lat},${lng}?q=${lat},${lng}(${encoded})`;
+
+    // Native app scheme for CoMaps on iOS / Android
+    const appUrl = `cm://${lat},${lng}/${encoded}`;
+
+    // Canonical OpenStreetMap web preview via CoMaps
+    const webUrl = `https://comaps.at/${lat},${lng}/${encoded}`;
+
+    return {
+      lat,
+      lng,
+      label: cleanLabel,
+      geoUrl,
+      appUrl,
+      webUrl
+    };
+  }
+
+  function applyCoMapsLink(anchorEl, urls) {
+    if (!anchorEl || !urls) return;
+    const ua = typeof navigator !== 'undefined' ? (navigator.userAgent || '') : '';
+    const isAndroid = /Android/i.test(ua);
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+    if (isAndroid) {
+      anchorEl.href = urls.geoUrl;
+      anchorEl.removeAttribute('target');
+      anchorEl.title = `Prowadź w CoMaps (nawigacja GPS do: ${urls.label})`;
+    } else if (isIOS) {
+      anchorEl.href = urls.appUrl;
+      anchorEl.removeAttribute('target');
+      anchorEl.title = `Prowadź w CoMaps (nawigacja GPS do: ${urls.label})`;
+    } else {
+      anchorEl.href = urls.webUrl;
+      anchorEl.target = '_blank';
+      anchorEl.rel = 'noopener noreferrer';
+      anchorEl.title = `Pokaż punkt „${urls.label}” w CoMaps (OpenStreetMap)`;
+    }
   }
 
   function getWazeSyncStopsForDay() {
@@ -2676,21 +2717,20 @@ ${tracksXml}
     }
 
     const wazeUrl = buildWazeUniversalUrl(target.lat, target.lng, STATE.userPosition);
-    const comapsUrl = buildCoMapsUniversalUrl(target.lat, target.lng, target.name);
+    const comapsUrls = buildCoMapsUrls(target.lat, target.lng, target.name);
     STATE.waze.currentUrl = wazeUrl;
-    STATE.waze.comapsUrl = comapsUrl;
+    STATE.waze.comapsUrl = comapsUrls.webUrl;
+    STATE.waze.comapsGeoUrl = comapsUrls.geoUrl;
+    STATE.waze.comapsAppUrl = comapsUrls.appUrl;
     STATE.waze.lastSyncedTargetName = target.name;
 
     if (els.wazeOpenLink) els.wazeOpenLink.href = wazeUrl;
-    if (els.comapsOpenLink) els.comapsOpenLink.href = comapsUrl;
+    applyCoMapsLink(els.comapsOpenLink, comapsUrls);
     if (els.hudWazeLink) {
       els.hudWazeLink.href = wazeUrl;
       els.hudWazeLink.title = `Prowadź w Waze do: ${target.name}`;
     }
-    if (els.hudCoMapsLink) {
-      els.hudCoMapsLink.href = comapsUrl;
-      els.hudCoMapsLink.title = `Prowadź w CoMaps (offline OSM) do: ${target.name}`;
-    }
+    applyCoMapsLink(els.hudCoMapsLink, comapsUrls);
 
     els.wazeTargetName.textContent = target.name;
     els.wazeStepCounter.textContent = target.stepLabel || target.kind;
