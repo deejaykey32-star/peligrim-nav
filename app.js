@@ -50,7 +50,7 @@
       mode: 'next_poi', // 'next_poi' | 'day_end' | 'approach'
       waypointIndex: 0,
       currentUrl: 'https://www.waze.com/ul?navigate=yes',
-      comapsUrl: 'https://comaps.at/route',
+      comapsUrl: 'https://comaps.at/',
       lastSyncedTargetName: ''
     },
     tracker: {
@@ -1882,7 +1882,7 @@ ${trkptsXml}
       els.poiModalWazeLink.href = buildWazeUniversalUrl(poi.lat, poi.lng, STATE.userPosition);
     }
     if (els.poiModalCoMapsLink) {
-      els.poiModalCoMapsLink.href = buildCoMapsUniversalUrl(poi.lat, poi.lng, poi.name, STATE.userPosition);
+      els.poiModalCoMapsLink.href = buildCoMapsUniversalUrl(poi.lat, poi.lng, poi.name);
     }
 
     els.poiModal.classList.remove('hidden');
@@ -2513,18 +2513,20 @@ ${tracksXml}
     return `https://www.waze.com/ul?${params.toString()}`;
   }
 
-  function buildCoMapsUniversalUrl(destLat, destLng, destName, userPos) {
-    const dName = destName || 'Cel';
-    const params = new URLSearchParams({
-      dll: `${Number(destLat).toFixed(6)},${Number(destLng).toFixed(6)}`,
-      daddr: dName,
-      type: 'pedestrian'
-    });
-    if (userPos && Number.isFinite(userPos.lat) && Number.isFinite(userPos.lng)) {
-      params.set('sll', `${Number(userPos.lat).toFixed(6)},${Number(userPos.lng).toFixed(6)}`);
-      params.set('saddr', 'Moja lokalizacja');
-    }
-    return `https://comaps.at/route?${params.toString()}`;
+  function sanitizePointLabel(name) {
+    if (!name) return 'Cel';
+    return String(name)
+      .replace(/[\/\\?#%]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function buildCoMapsUniversalUrl(destLat, destLng, destName) {
+    const lat = Number(destLat).toFixed(6);
+    const lng = Number(destLng).toFixed(6);
+    const cleanLabel = sanitizePointLabel(destName);
+    const encoded = encodeURIComponent(cleanLabel);
+    return `https://comaps.at/${lat},${lng}/${encoded}`;
   }
 
   function getWazeSyncStopsForDay() {
@@ -2674,7 +2676,7 @@ ${tracksXml}
     }
 
     const wazeUrl = buildWazeUniversalUrl(target.lat, target.lng, STATE.userPosition);
-    const comapsUrl = buildCoMapsUniversalUrl(target.lat, target.lng, target.name, STATE.userPosition);
+    const comapsUrl = buildCoMapsUniversalUrl(target.lat, target.lng, target.name);
     STATE.waze.currentUrl = wazeUrl;
     STATE.waze.comapsUrl = comapsUrl;
     STATE.waze.lastSyncedTargetName = target.name;
