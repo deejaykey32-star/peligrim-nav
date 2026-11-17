@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="112" fill="#065F46"/>
+  <circle cx="256" cy="256" r="172" fill="none" stroke="#ECFDF5" stroke-width="14" stroke-opacity="0.25"/>
+  <circle cx="256" cy="256" r="136" fill="none" stroke="#ECFDF5" stroke-width="6" stroke-opacity="0.45"/>
+  <!-- Trail Cross / Compass Rose -->
+  <path d="M256 92 L292 220 L420 256 L292 292 L256 420 L220 292 L92 256 L220 220 Z" fill="#FFFFFF"/>
+  <!-- North Pilgrim Needle -->
+  <path d="M256 92 L292 220 L256 256 L220 220 Z" fill="#F59E0B"/>
+  <!-- Center Cross Emblem -->
+  <rect x="242" y="206" width="28" height="100" rx="6" fill="#065F46"/>
+  <rect x="206" y="242" width="100" height="28" rx="6" fill="#065F46"/>
+</svg>

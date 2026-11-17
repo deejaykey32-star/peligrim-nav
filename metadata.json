@@ -1,0 +1,6 @@
+{
+  "name": "Szlak Pielgrzyma — Nawigacja Offline PWA",
+  "description": "Darmowa aplikacja PWA do nawigacji pieszej dla pielgrzymów z mapami OSM/OpenTopoMap, trybem offline, punktami POI, rozważaniami i eksportem GPX.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

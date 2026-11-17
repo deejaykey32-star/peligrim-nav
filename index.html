@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Szlak Pielgrzyma 3D — WW Trinity · Mapa AON · Via Air</title>
+    <meta name="description" content="Darmowa nawigacja GPS 3D dla pielgrzymów: wykrywanie najbliższej diecezji z WW Trinity, wybór dowolnej diecezji lub archidiecezji, przełączenie na Mapa AON i Via Air, tracker oraz tryb offline." />
+    <meta property="og:title" content="Szlak Pielgrzyma 3D — WW Trinity · Mapa AON · Via Air" />
+    <meta property="og:description" content="Nawigacja GPS 3D z widokiem z pozycji wędrowca, wyborem diecezji WW Trinity wg lokalizacji, trasą na każdy dzień i trybem offline." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#065F46" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Pielgrzym" />
+
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      crossorigin=""
+      defer
+    ></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="./" class="header-brand">
+        <img src="./icon.svg" alt="" class="brand-mark" width="28" height="28" />
+        <span id="brand-title" class="brand-title">Szlak Pielgrzyma 3D</span>
+      </a>
+
+      <nav class="header-nav" aria-label="Narzędzia trasy">
+        <button type="button" id="nav-fit-route" class="header-nav-btn">Cała trasa</button>
+        <button type="button" id="nav-export-gpx" class="header-nav-btn">Pobierz GPX</button>
+        <button type="button" id="nav-offline-tools" class="header-nav-btn">Mapy offline</button>
+      </nav>
+
+      <div class="header-actions">
+        <button type="button" id="btn-install-pwa" class="btn-primary btn-install-cta" aria-label="Zainstaluj wersję PWA na urządzeniu">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          <span>Zainstaluj PWA</span>
+        </button>
+        <button
+          type="button"
+          id="btn-open-menu"
+          class="btn-secondary"
+          aria-label="Otwórz menu narzędzi, GPX i offline"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+          <span class="menu-btn-label">Menu</span>
+        </button>
+      </div>
+    </header>
+
+    <div id="offline-banner" class="offline-banner hidden" role="status" aria-live="polite">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="1" y1="1" x2="23" y2="23" />
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55" />
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39" />
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+        <line x1="12" y1="20" x2="12.01" y2="20" />
+      </svg>
+      <span>Tryb Offline — nawigacja na zapisanych mapach</span>
+    </div>
+
+    <main class="workspace">
+      <section id="map-stage" class="map-stage" aria-label="Interaktywna mapa nawigacji 2D i 3D">
+        <!-- 3D CAMERA RIG (perspektywa jak Waze / NaviExpert) -->
+        <div id="map-3d-rig" class="map-3d-rig">
+          <div id="map-heading-rig" class="map-heading-rig">
+            <div id="map"></div>
+          </div>
+        </div>
+
+        <!-- HORYZONT NIEBA W WIDOKU 3D -->
+        <div id="sky-horizon-scrim" class="sky-horizon-scrim hidden" aria-hidden="true"></div>
+
+        <!-- WIDOCZNY WSKAŹNIK PROWADZĄCY DO CELU W WIDOKU 3D -->
+        <div id="guide-3d-overlay" class="guide-3d-overlay hidden" aria-live="polite">
+          <div id="guide-3d-callout" class="guide-3d-callout">
+            <span id="guide-3d-dir-label" class="guide-3d-dir-label">Kierunek celu</span>
+            <span id="guide-3d-dist-label" class="guide-3d-dist-label tabular">—</span>
+          </div>
+
+          <div class="guide-3d-reticle">
+            <!-- Obrotowa strzałka wskazująca dokładny azymut celu -->
+            <div id="guide-3d-pointer" class="guide-3d-pointer" aria-hidden="true">
+              <svg width="112" height="112" viewBox="0 0 112 112">
+                <circle cx="56" cy="56" r="48" fill="none" stroke="rgba(245,158,11,0.5)" stroke-width="3" stroke-dasharray="6 6"/>
+                <polygon points="56,4 67,24 56,19 45,24" fill="#f59e0b" stroke="#0f172a" stroke-width="1.8"/>
+              </svg>
+            </div>
+            <!-- Kursor pozycji wędrowca 3D -->
+            <div class="guide-3d-puck" aria-hidden="true">
+              <svg width="46" height="46" viewBox="0 0 46 46">
+                <circle cx="23" cy="23" r="21" fill="#0f172a" stroke="#ffffff" stroke-width="3"/>
+                <polygon points="23,9 34,33 23,27 12,33" fill="#10b981" stroke="#ffffff" stroke-width="1.5"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- NAWIGACJA TURN-BY-TURN (STYL NAVIEXPERT / WAZE) -->
+        <div id="nav-hud" class="nav-hud hidden" role="region" aria-label="Aktywna nawigacja krok po kroku">
+          <div id="nav-arrow-box" class="nav-arrow-box" aria-hidden="true"></div>
+          <div class="nav-hud-main">
+            <div class="nav-hud-top">
+              <span id="nav-maneuver-dist" class="nav-hud-dist tabular">—</span>
+              <span id="nav-offroute-tag" class="nav-offroute-tag hidden">Poza trasą</span>
+            </div>
+            <div id="nav-maneuver-text" class="nav-hud-text">Wyznaczanie trasy...</div>
+            <div id="nav-hud-eta" class="nav-hud-eta tabular"></div>
+          </div>
+          <div class="nav-hud-actions">
+            <button
+              type="button"
+              id="btn-voice-toggle"
+              class="nav-hud-btn"
+              aria-pressed="true"
+              title="Komunikaty głosowe"
+            >
+              <svg id="icon-voice-on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+              </svg>
+              <svg id="icon-voice-off" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <line x1="23" y1="9" x2="17" y2="15" />
+                <line x1="17" y1="9" x2="23" y2="15" />
+              </svg>
+            </button>
+            <a
+              id="link-hud-waze"
+              class="nav-hud-btn nav-hud-waze"
+              href="https://www.waze.com/ul?navigate=yes"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Synchronizuj i otwórz bieżący cel w nawigacji Waze"
+            >
+              Waze
+            </a>
+            <button
+              type="button"
+              id="btn-stop-nav"
+              class="nav-hud-btn nav-hud-stop"
+              title="Zakończ nawigację"
+            >
+              Stop
+            </button>
+          </div>
+        </div>
+
+        <div id="map-layer-switch" class="map-layer-switch" role="group" aria-label="Wybór podkładu mapy">
+          <button type="button" id="btn-layer-osm" class="layer-btn is-active" aria-pressed="true">
+            Mapa OSM
+          </button>
+          <button type="button" id="btn-layer-topo" class="layer-btn" aria-pressed="false">
+            Szlak Topo
+          </button>
+        </div>
+
+        <div class="map-fabs">
+          <button
+            type="button"
+            id="btn-toggle-3d"
+            class="map-fab"
+            aria-pressed="false"
+            title="Widok 3D z pozycji wędrowca"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3l9 4.5v9L12 21l-9-4.5v-9L12 3z" />
+              <polyline points="12 12 21 7.5" />
+              <polyline points="12 12 12 21" />
+              <polyline points="12 12 3 7.5" />
+            </svg>
+            <span id="label-toggle-3d" class="map-fab-label">Widok 3D</span>
+          </button>
+
+          <button
+            type="button"
+            id="btn-center-me"
+            class="map-fab is-active"
+            aria-pressed="true"
+            title="Centruj na mnie (Auto-follow GPS)"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M12 2v3" />
+              <path d="M12 19v3" />
+              <path d="M2 12h3" />
+              <path d="M19 12h3" />
+              <circle cx="12" cy="12" r="8" />
+            </svg>
+            <span class="map-fab-label">Centruj na mnie</span>
+          </button>
+
+          <button
+            type="button"
+            id="btn-fit-route"
+            class="map-fab"
+            title="Pokaż całą ścieżkę"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 3 21 3 21 9" />
+              <polyline points="9 21 3 21 3 15" />
+              <line x1="21" y1="3" x2="14" y2="10" />
+              <line x1="3" y1="21" x2="10" y2="14" />
+            </svg>
+            <span class="map-fab-label">Cała trasa</span>
+          </button>
+        </div>
+      </section>
+
+      <aside id="poi-sheet" class="poi-sheet" aria-label="Wybór sekcji, diecezji WW Trinity, nawigacja dnia i tracker GPS">
+        <div id="sheet-handle-zone" class="sheet-handle-zone">
+          <div class="sheet-drag-bar" aria-hidden="true"></div>
+
+          <div class="telemetry-strip">
+            <div class="telemetry-cell">
+              <span class="telemetry-label">GPS</span>
+              <span id="stat-accuracy" class="telemetry-value tabular">Szukam...</span>
+            </div>
+            <div class="telemetry-cell">
+              <span class="telemetry-label">Przebyto</span>
+              <span id="stat-traveled" class="telemetry-value tabular">0 m</span>
+            </div>
+            <div class="telemetry-cell">
+              <span class="telemetry-label">Czas</span>
+              <span id="stat-elapsed" class="telemetry-value tabular">00:00:00</span>
+            </div>
+            <div class="telemetry-cell">
+              <span class="telemetry-label">Do celu / POI</span>
+              <span id="stat-nearest-dist" class="telemetry-value tabular">—</span>
+            </div>
+          </div>
+
+          <div class="sheet-toggle-row">
+            <span id="nearest-poi-line" class="nearest-poi-line">Ładowanie pielgrzymek...</span>
+            <button
+              type="button"
+              id="btn-toggle-sheet"
+              class="sheet-expand-btn"
+              aria-expanded="false"
+              aria-controls="sheet-body"
+            >
+              <span id="sheet-expand-label">Wybierz trasę</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="sheet-body" class="sheet-body">
+          <div id="gps-warning-box" class="status-message-box hidden" role="alert"></div>
+
+          <!-- KARTA ZACHĘCAJĄCA DO AUTOMATYCZNEJ INSTALACJI PWA -->
+          <section id="pwa-install-card" class="pwa-install-card" aria-label="Instalacja aplikacji PWA">
+            <div class="pwa-install-card-head">
+              <div class="pwa-install-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                  <path d="M12 7v6" />
+                  <polyline points="9 10 12 13 15 10" />
+                  <line x1="12" y1="18" x2="12.01" y2="18" />
+                </svg>
+              </div>
+              <div class="pwa-install-copy">
+                <h2 class="pwa-install-title">Zabierz nawigację na szlak jako aplikację</h2>
+                <p id="pwa-install-subtitle" class="pwa-install-desc">Kliknij poniżej, aby automatycznie zainstalować wersję PWA na ekranie głównym i korzystać z map w lesie bez zasięgu GSM.</p>
+              </div>
+            </div>
+            <div class="pwa-install-actions">
+              <button type="button" id="btn-card-install-pwa" class="btn-primary pwa-install-main-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                <span id="btn-card-install-label">Zainstaluj aplikację PWA</span>
+              </button>
+              <button type="button" id="btn-dismiss-install-card" class="btn-secondary">
+                Później
+              </button>
+            </div>
+          </section>
+
+          <!-- PRZEŁĄCZNIK 3 SEKCJI: WW TRINITY / MAPA AON / VIA AIR -->
+          <section class="pilgrimage-section" aria-label="Wybór sekcji pielgrzymkowej">
+            <div class="section-label-row">
+              <h2 class="section-heading">Sekcja pielgrzymki</h2>
+              <span id="active-app-code" class="section-meta-text tabular">ww-trinity</span>
+            </div>
+            <div id="section-selector" class="pilgrimage-bar" role="group" aria-label="Trzy sekcje aplikacji">
+              <button type="button" class="pilgrimage-btn is-active" data-section-id="ww-trinity" aria-pressed="true">WW Trinity</button>
+              <button type="button" class="pilgrimage-btn" data-section-id="mapa-aon" aria-pressed="false">Mapa AON</button>
+              <button type="button" class="pilgrimage-btn" data-section-id="via-air" aria-pressed="false">Via Air 365</button>
+            </div>
+          </section>
+
+          <!-- PANEL DIECEZJI WW TRINITY (SUGESTIA WG LOKALIZACJI + WYBÓR DOWOLNEJ DIECEZJI) -->
+          <section id="ww-trinity-panel" class="diocese-panel" aria-label="Wybór diecezji WW Trinity">
+            <div id="nearest-diocese-card" class="nearest-diocese-card">
+              <div class="nearest-diocese-info">
+                <div class="nearest-diocese-kicker">Propozycja wg Twojej lokalizacji GPS</div>
+                <div id="nearest-diocese-name" class="nearest-diocese-name">Ustalanie pozycji GPS...</div>
+                <div id="nearest-diocese-meta" class="nearest-diocese-meta">Po uzyskaniu sygnału GPS wskażemy najbliższą diecezję WW Trinity.</div>
+              </div>
+              <div class="nearest-diocese-actions">
+                <button type="button" id="btn-pick-nearest-diocese" class="btn-primary hidden">
+                  Wybierz najbliższą
+                </button>
+                <button type="button" id="btn-detect-gps-diocese" class="btn-secondary">
+                  Wykryj GPS
+                </button>
+              </div>
+            </div>
+
+            <div class="diocese-filter-head">
+              <input
+                type="search"
+                id="diocese-search"
+                class="diocese-search"
+                placeholder="Szukaj diecezji, archidiecezji lub miasta..."
+                aria-label="Szukaj diecezji lub archidiecezji z WW Trinity"
+              />
+              <div id="diocese-region-bar" class="region-bar" role="group" aria-label="Filtr regionu">
+                <button type="button" class="filter-btn is-active" data-region="all" aria-pressed="true">Wszystkie (85)</button>
+                <button type="button" class="filter-btn" data-region="Polska" aria-pressed="false">Polska (45)</button>
+                <button type="button" class="filter-btn" data-region="Europa" aria-pressed="false">Europa</button>
+                <button type="button" class="filter-btn" data-region="Świat" aria-pressed="false">Świat</button>
+              </div>
+            </div>
+
+            <div class="diocese-select-wrap">
+              <label for="diocese-select" class="sr-only">Wybierz diecezję lub archidiecezję</label>
+              <select id="diocese-select" class="diocese-select"></select>
+            </div>
+          </section>
+
+          <!-- WYBÓR DNIA / ŚCIEŻKI ORAZ NAWIGACJA DNIA + 3D -->
+          <section class="stage-section" aria-label="Nawigacja wybranego dnia">
+            <div class="section-label-row">
+              <h2 class="section-heading">Trasa na wybrany dzień</h2>
+            </div>
+            <div id="stage-selector" class="stage-bar" role="group" aria-label="Dni pielgrzymki"></div>
+
+            <div class="route-summary-block">
+              <h1 id="route-title" class="route-title">Ładowanie trasy...</h1>
+              <div id="route-meta" class="route-meta"></div>
+              <p id="route-desc" class="route-desc"></p>
+            </div>
+
+            <div class="nav-cta-row">
+              <button type="button" id="btn-start-day-nav" class="btn-primary">
+                Nawiguj 3D (GPS)
+              </button>
+              <button type="button" id="btn-route-approach" class="btn-secondary">
+                Dojście z GPS
+              </button>
+            </div>
+            <div id="approach-status" class="approach-status hidden"></div>
+
+            <!-- SYNCHRONIZACJA Z NAWIGACJĄ WAZE -->
+            <div id="waze-sync-panel" class="waze-sync-panel" aria-label="Synchronizacja z nawigacją Waze">
+              <div class="waze-sync-head">
+                <div class="waze-brand-wrap">
+                  <span class="waze-badge" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0" />
+                      <path d="M15 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0" />
+                      <path d="M5 17H3v-4a6 6 0 0 1 6-6h6a6 6 0 0 1 6 6v4h-2" />
+                      <path d="M9 17h6" />
+                    </svg>
+                  </span>
+                  <div>
+                    <h3 class="waze-title">Synchronizacja z Waze</h3>
+                    <div id="waze-sync-status" class="waze-status-line">Auto-sync z aktualnym punktem trasy</div>
+                  </div>
+                </div>
+                <button type="button" id="btn-waze-autosync" class="filter-btn is-active" aria-pressed="true">
+                  Auto-sync: WŁ
+                </button>
+              </div>
+
+              <div id="waze-mode-bar" class="waze-mode-bar" role="group" aria-label="Cel synchronizacji Waze">
+                <button type="button" class="filter-btn is-active" data-waze-mode="next_poi" aria-pressed="true">Kolejny punkt trasy</button>
+                <button type="button" class="filter-btn" data-waze-mode="day_end" aria-pressed="false">Meta dnia</button>
+                <button type="button" class="filter-btn" data-waze-mode="approach" aria-pressed="false">Wejście na szlak</button>
+              </div>
+
+              <div class="waze-target-box">
+                <div class="waze-target-info">
+                  <div class="waze-target-kicker">
+                    <span>Zsynchronizowany cel Waze</span>
+                    <span id="waze-step-counter" class="tabular"></span>
+                  </div>
+                  <div id="waze-target-name" class="waze-target-name">Ładowanie punktu...</div>
+                  <div id="waze-target-coords" class="waze-target-coords tabular">—</div>
+                </div>
+                <div id="waze-step-controls" class="waze-step-controls">
+                  <button type="button" id="btn-waze-prev" class="btn-icon" aria-label="Poprzedni punkt w Waze" title="Poprzedni punkt">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                  </button>
+                  <button type="button" id="btn-waze-next" class="btn-icon" aria-label="Następny punkt w Waze" title="Następny punkt">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="waze-cta-row">
+                <a
+                  id="link-waze-open"
+                  class="btn-waze"
+                  href="https://www.waze.com/ul?navigate=yes"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polygon points="3 11 22 2 13 21 11 13 3 11" />
+                  </svg>
+                  <span>Prowadź w Waze</span>
+                </a>
+                <button type="button" id="btn-waze-copy" class="btn-secondary">
+                  Kopiuj link Waze
+                </button>
+              </div>
+            </div>
+
+            <!-- KROKI MANEWRÓW DNIA -->
+            <details id="maneuvers-details" class="maneuvers-details">
+              <summary class="maneuvers-summary">
+                <span>Plan manewrów na wybrany dzień</span>
+                <span id="maneuvers-count" class="tabular"></span>
+              </summary>
+              <ol id="maneuvers-list" class="maneuvers-list"></ol>
+            </details>
+          </section>
+
+          <!-- TRACKER PIELGRZYMA -->
+          <section class="tracker-panel" aria-label="Tracker śladu GPS">
+            <div class="tracker-head">
+              <div>
+                <h2 class="tracker-title">Tracker GPS pielgrzyma</h2>
+                <div id="tracker-status-line" class="tracker-meta">
+                  <span id="tracker-state-text">Gotowy do zapisu śladu</span>
+                  <span aria-hidden="true">·</span>
+                  <span id="tracker-speed" class="tabular">0.0 km/h</span>
+                  <span aria-hidden="true">·</span>
+                  <span id="tracker-progress" class="tabular">Postęp 0%</span>
+                </div>
+              </div>
+              <span id="tracker-points-count" class="tracker-pts tabular">0 pkt</span>
+            </div>
+
+            <div class="tracker-controls">
+              <button type="button" id="btn-tracker-toggle" class="btn-primary">
+                Start trackera
+              </button>
+              <button type="button" id="btn-tracker-export" class="btn-secondary" disabled>
+                Zapisz ślad GPX
+              </button>
+              <button type="button" id="btn-tracker-reset" class="btn-secondary" disabled>
+                Reset
+              </button>
+            </div>
+          </section>
+
+          <!-- LISTA PUNKTÓW POI -->
+          <section aria-label="Punkty na wybranym dniu trasy">
+            <div id="poi-filter-bar" class="filter-bar" role="group" aria-label="Filtruj punkty POI">
+              <button type="button" class="filter-btn is-active" data-filter="all" aria-pressed="true">Wszystkie</button>
+              <button type="button" class="filter-btn" data-filter="start_meta" aria-pressed="false">Start / Meta</button>
+              <button type="button" class="filter-btn" data-filter="church" aria-pressed="false">Sanktuaria</button>
+              <button type="button" class="filter-btn" data-filter="water" aria-pressed="false">Postój / Woda</button>
+              <button type="button" class="filter-btn" data-filter="medical" aria-pressed="false">Medyczny</button>
+              <button type="button" class="filter-btn" data-filter="accommodation" aria-pressed="false">Nocleg</button>
+            </div>
+
+            <ul id="poi-list" class="poi-list"></ul>
+          </section>
+        </div>
+      </aside>
+    </main>
+
+    <!-- MODAL SZCZEGÓŁÓW PUNKTU POI I MODLITWY -->
+    <div id="poi-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="poi-modal-title">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <div id="poi-modal-kicker" class="modal-kicker"></div>
+            <h2 id="poi-modal-title" class="modal-title"></h2>
+          </div>
+          <button type="button" id="btn-poi-close" class="btn-icon" aria-label="Zamknij okno">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <p id="poi-modal-desc" class="modal-desc"></p>
+
+          <div id="poi-modal-prayer-box" class="prayer-box">
+            <h3 id="poi-modal-prayer-title" class="prayer-heading"></h3>
+            <p id="poi-modal-prayer-text" class="prayer-text"></p>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="btn-poi-locate" class="btn-secondary">Pokaż na mapie</button>
+          <a
+            id="link-poi-waze"
+            class="btn-waze"
+            href="https://www.waze.com/ul?navigate=yes"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Prowadź w Waze
+          </a>
+          <button type="button" id="btn-poi-next" class="btn-primary">Następny punkt</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL MENU: GPX I TRYB OFFLINE -->
+    <div id="menu-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="menu-modal-title">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <div class="modal-kicker">Narzędzia pielgrzyma</div>
+            <h2 id="menu-modal-title" class="modal-title">GPX i Mapy Offline</h2>
+          </div>
+          <button type="button" id="btn-menu-close" class="btn-icon" aria-label="Zamknij menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div id="menu-install-section" class="menu-section">
+            <h3 class="menu-section-title">Instalacja aplikacji PWA</h3>
+            <p class="menu-section-desc">Zainstaluj aplikację na ekranie głównym telefonu, aby uruchamiać ją jak natywną nawigację bez zasięgu GSM.</p>
+            <button type="button" id="btn-menu-install" class="btn-primary">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              <span>Zainstaluj automatycznie na urządzeniu</span>
+            </button>
+          </div>
+
+          <div class="menu-section">
+            <h3 class="menu-section-title">Eksport i import GPX</h3>
+            <p class="menu-section-desc">Pobierz wybrany dzień lub całą pętlę do zegarka Garmin / Zepp albo wczytaj własny plik GPX.</p>
+            <div class="menu-btn-row">
+              <button type="button" id="btn-export-gpx" class="btn-primary">Pobierz trasę (.gpx)</button>
+              <label class="file-upload-label">
+                <span>Wczytaj plik .gpx</span>
+                <input type="file" id="input-import-gpx" accept=".gpx,application/gpx+xml,text/xml" class="sr-only" />
+              </label>
+              <button type="button" id="btn-reset-route" class="btn-secondary hidden">Przywróć sekcję</button>
+            </div>
+          </div>
+
+          <div class="menu-section">
+            <h3 class="menu-section-title">Mapy offline (las bez GSM)</h3>
+            <p id="tile-cache-status" class="menu-section-desc">Sprawdzanie pamięci podręcznej map...</p>
+            <div id="tile-progress-wrap" class="progress-track hidden" aria-hidden="true">
+              <div id="tile-progress-fill" class="progress-fill"></div>
+            </div>
+            <div class="menu-btn-row">
+              <button type="button" id="btn-cache-tiles" class="btn-primary">Pobierz kafelki trasy</button>
+              <button type="button" id="btn-clear-tiles" class="btn-secondary">Wyczyść kafelki</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL INSTRUKCJI INSTALACJI PWA (GDY PRZEGLĄDARKA WYMAGA KROKU RĘCZNEGO / iOS) -->
+    <div id="ios-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="ios-modal-title">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <div id="ios-modal-kicker" class="modal-kicker">iPhone / iPad (Safari)</div>
+            <h2 id="ios-modal-title" class="modal-title">Dodaj do ekranu początkowego</h2>
+          </div>
+          <button type="button" id="btn-ios-close" class="btn-icon" aria-label="Zamknij instrukcję">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div id="ios-modal-body" class="modal-body">
+          <p class="modal-desc">1. Dotknij ikonę <strong>Udostępnij</strong> (kwadrat ze strzałką w górę) na pasku Safari.</p>
+          <p class="modal-desc">2. Przewiń listę w dół i wybierz <strong>Do ekranu początkowego</strong>, a następnie zatwierdź przyciskiem <strong>Dodaj</strong>.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btn-ios-ok" class="btn-primary">Rozumiem</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
