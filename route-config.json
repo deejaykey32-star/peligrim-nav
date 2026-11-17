@@ -11152,19 +11152,344 @@
     "mapa-aon": {
       "id": "mapa-aon",
       "shortName": "Mapa AON",
-      "name": "Mapa AON — Szlak Orlich Gniazd",
-      "subtitle": "Trynitarna Pielgrzymka Gwiaździsta · 18–24.06.2026 (mapa-aon.pages.dev)",
-      "accentColor": "#B45309",
-      "gpxFileName": "mapa-aon-orle-gniazda.gpx",
-      "description": "7 dni wędrówki Szlakiem Orlich Gniazd z Jasnej Góry przez Olsztyn, Złoty Potok, Bobolice, Ogrodzieniec, Pustynię Błędowską, Pieskową Skałę i Ojców (Dzień Ojca) do Łagiewnik.",
+      "name": "Mapa AON — Trynitarna Pielgrzymka Gwiaździsta",
+      "subtitle": "Z pozycji pielgrzyma ku Jasnej Górze, Szlak Orlich Gniazd i powrót do Domu",
+      "accentColor": "#065F46",
+      "gpxFileName": "mapa-aon-caly-szlak.gpx",
+      "description": "Trynitarna Pielgrzymka Gwiaździsta łącząca pielgrzymów z całego świata: z aktualnej pozycji GPS pielgrzyma (oraz z Kościoła Trójcy Świętej w Kochłowicach) do Jasnej Góry w Częstochowie, dalej wspólnym Szlakiem Orlich Gniazd przez Pustynię Błędowską i Ojców (Dzień Ojca) do Sanktuarium Bożego Miłosierdzia w Łagiewnikach i z powrotem do miejsca wyjścia i Domu.",
       "stages": [
         {
+          "id": "aon-start",
+          "shortLabel": "Start: Dom → Kochłowice",
+          "name": "Start: Dom → Kościół Trójcy Świętej w Kochłowicach",
+          "color": "#065F46",
+          "waypoints": [
+            [
+              50.2525,
+              18.8895
+            ],
+            [
+              50.2547,
+              18.8936
+            ]
+          ]
+        },
+        {
+          "id": "aon-dojscie",
+          "shortLabel": "Dojście: Kochłowice → Jasna Góra",
+          "name": "Promień Śląski: Kochłowice → Piekary Śląskie → Tarnowskie Góry → Koszęcin → Jasna Góra",
+          "color": "#0284c7",
+          "waypoints": [
+            [
+              50.2547,
+              18.8936
+            ],
+            [
+              50.3484,
+              18.9158
+            ],
+            [
+              50.3806,
+              18.9478
+            ],
+            [
+              50.4442,
+              18.8556
+            ],
+            [
+              50.5312,
+              18.855
+            ],
+            [
+              50.6317,
+              18.8553
+            ],
+            [
+              50.6901,
+              18.857
+            ],
+            [
+              50.7425,
+              18.8594
+            ],
+            [
+              50.8389,
+              18.9261
+            ],
+            [
+              50.8122,
+              19.0975
+            ]
+          ]
+        },
+        {
+          "id": "aon-ray-rome",
+          "shortLabel": "Rzym & Świat → Jasna Góra",
+          "name": "Pielgrzymi Świata: Rzym (Watykan / Europa) → Częstochowa",
+          "color": "#e76f51",
+          "waypoints": [
+            [
+              41.9022,
+              12.4539
+            ],
+            [
+              43.7696,
+              11.2558
+            ],
+            [
+              45.4384,
+              10.9916
+            ],
+            [
+              47.0707,
+              15.4395
+            ],
+            [
+              48.2082,
+              16.3738
+            ],
+            [
+              49.1951,
+              16.6068
+            ],
+            [
+              49.8209,
+              18.2625
+            ],
+            [
+              50.8122,
+              19.0975
+            ]
+          ]
+        },
+        {
+          "id": "aon-ray-gdansk",
+          "shortLabel": "Gdańsk → Jasna Góra",
+          "name": "Promień Północny: Gdańsk (Bazylika Mariacka) → Częstochowa",
+          "color": "#e63946",
+          "waypoints": [
+            [
+              54.3499,
+              18.6534
+            ],
+            [
+              54.0324,
+              18.7846
+            ],
+            [
+              53.5932,
+              18.7523
+            ],
+            [
+              53.0138,
+              18.5984
+            ],
+            [
+              52.6483,
+              19.0678
+            ],
+            [
+              52.2159,
+              19.1458
+            ],
+            [
+              51.8546,
+              19.4124
+            ],
+            [
+              51.7592,
+              19.456
+            ],
+            [
+              51.2854,
+              19.3687
+            ],
+            [
+              50.8122,
+              19.0975
+            ]
+          ]
+        },
+        {
+          "id": "aon-ray-wroclaw",
+          "shortLabel": "Wrocław → Jasna Góra",
+          "name": "Promień Zachodni: Wrocław (Ostrów Tumski) → Częstochowa",
+          "color": "#2a9d8f",
+          "waypoints": [
+            [
+              51.1141,
+              17.0463
+            ],
+            [
+              51.2101,
+              17.3824
+            ],
+            [
+              51.2812,
+              18.0124
+            ],
+            [
+              51.2215,
+              18.5678
+            ],
+            [
+              50.9854,
+              18.8523
+            ],
+            [
+              50.8122,
+              19.0975
+            ]
+          ]
+        },
+        {
+          "id": "aon-ray-vilnius",
+          "shortLabel": "Wilno → Jasna Góra",
+          "name": "Promień Kresowy: Wilno (Ostra Brama) → Częstochowa",
+          "color": "#f4a261",
+          "waypoints": [
+            [
+              54.6744,
+              25.2895
+            ],
+            [
+              54.1012,
+              22.9308
+            ],
+            [
+              53.1325,
+              23.1688
+            ],
+            [
+              52.2297,
+              21.0122
+            ],
+            [
+              51.4027,
+              21.1471
+            ],
+            [
+              51.0654,
+              19.4443
+            ],
+            [
+              50.8122,
+              19.0975
+            ]
+          ]
+        },
+        {
+          "id": "aon-ray-warszawa",
+          "shortLabel": "Warszawa → Jasna Góra",
+          "name": "Promień Centralny: Warszawa → Częstochowa",
+          "color": "#3a86ff",
+          "waypoints": [
+            [
+              52.2297,
+              21.0122
+            ],
+            [
+              52.0652,
+              20.6124
+            ],
+            [
+              51.9542,
+              20.1458
+            ],
+            [
+              51.5287,
+              19.7892
+            ],
+            [
+              51.2854,
+              19.3687
+            ],
+            [
+              50.8122,
+              19.0975
+            ]
+          ]
+        },
+        {
+          "id": "aon-ray-zakopane",
+          "shortLabel": "Zakopane → Jasna Góra",
+          "name": "Promień Południowy: Zakopane (Krzeptówki) → Częstochowa",
+          "color": "#06d6a0",
+          "waypoints": [
+            [
+              49.2992,
+              19.9496
+            ],
+            [
+              49.4842,
+              19.9678
+            ],
+            [
+              49.6087,
+              19.9624
+            ],
+            [
+              49.8833,
+              19.5
+            ],
+            [
+              50.1425,
+              19.4024
+            ],
+            [
+              50.2801,
+              19.5638
+            ],
+            [
+              50.5892,
+              19.1678
+            ],
+            [
+              50.8122,
+              19.0975
+            ]
+          ]
+        },
+        {
+          "id": "aon-ray-lublin",
+          "shortLabel": "Lublin → Jasna Góra",
+          "name": "Promień Wschodni: Lublin (Archikatedra) → Częstochowa",
+          "color": "#118ab2",
+          "waypoints": [
+            [
+              51.2465,
+              22.5684
+            ],
+            [
+              51.4167,
+              21.9667
+            ],
+            [
+              51.4027,
+              21.1471
+            ],
+            [
+              51.1189,
+              20.8524
+            ],
+            [
+              50.8703,
+              20.6275
+            ],
+            [
+              50.8521,
+              19.9856
+            ],
+            [
+              50.8122,
+              19.0975
+            ]
+          ]
+        },
+        {
           "id": "aon-d1",
-          "dayNumber": 1,
-          "shortLabel": "Dzień 1 (18.06)",
+          "shortLabel": "Dzień 1: Jasna Góra → Złoty Potok",
           "name": "Dzień 1: Jasna Góra → Zamek Olsztyn → Złoty Potok",
-          "dayLabel": "18.06 · ok. 28 km · +320 m",
-          "description": "Wyjście spod Wałów Jasnej Góry przez Kucelin, Zamek Królewski w Olsztynie i Zrębice do Złotego Potoku.",
           "color": "#065F46",
           "waypoints": [
             [
@@ -11176,12 +11501,12 @@
               19.1623
             ],
             [
-              50.7497,
-              19.2747
+              50.7501,
+              19.2743
             ],
             [
-              50.7342,
-              19.3458
+              50.7289,
+              19.3456
             ],
             [
               50.7093,
@@ -11191,23 +11516,20 @@
         },
         {
           "id": "aon-d2",
-          "dayNumber": 2,
-          "shortLabel": "Dzień 2 (19.06)",
+          "shortLabel": "Dzień 2: Złoty Potok → Bobolice",
           "name": "Dzień 2: Złoty Potok → Mirów → Zamek Bobolice",
-          "dayLabel": "19.06 · ok. 24 km · +280 m",
-          "description": "Przez Ostrężnik i Grzędę Mirowsko-Bobolicką pod królewskie baszty w Bobolicach.",
-          "color": "#1D4ED8",
+          "color": "#065F46",
           "waypoints": [
             [
               50.7093,
               19.4347
             ],
             [
-              50.6865,
-              19.4032
+              50.6582,
+              19.4521
             ],
             [
-              50.6455,
+              50.6152,
               19.4754
             ],
             [
@@ -11218,12 +11540,9 @@
         },
         {
           "id": "aon-d3",
-          "dayNumber": 3,
-          "shortLabel": "Dzień 3 (20.06)",
+          "shortLabel": "Dzień 3: Bobolice → Ogrodzieniec",
           "name": "Dzień 3: Bobolice → Góra Zborów → Ogrodzieniec",
-          "dayLabel": "20.06 · ok. 26 km · +360 m",
-          "description": "Przez Górę Zborów w Podlesicach i Zamek Bąkowiec w Morsku do Ogrodzieńca.",
-          "color": "#6D28D9",
+          "color": "#065F46",
           "waypoints": [
             [
               50.6133,
@@ -11231,11 +11550,11 @@
             ],
             [
               50.5756,
-              19.5257
+              19.5262
             ],
             [
-              50.5482,
-              19.5164
+              50.5124,
+              19.5391
             ],
             [
               50.4533,
@@ -11245,12 +11564,9 @@
         },
         {
           "id": "aon-d4",
-          "dayNumber": 4,
-          "shortLabel": "Dzień 4 (21.06)",
-          "name": "Dzień 4: Ogrodzieniec → Smoleń → Pustynia Błędowska",
-          "dayLabel": "21.06 · ok. 27 km · +250 m",
-          "description": "Przez Zamek Smoleń i Bydlin aż na Różę Wiatrów na Pustyni Błędowskiej.",
-          "color": "#B45309",
+          "shortLabel": "Dzień 4: Ogrodzieniec → Pustynia Błędowska",
+          "name": "Dzień 4: Ogrodzieniec → Smoleń → Pustynia Błędowska (Róża Wiatrów)",
+          "color": "#ca8a04",
           "waypoints": [
             [
               50.4533,
@@ -11258,11 +11574,11 @@
             ],
             [
               50.4389,
-              19.6783
+              19.6764
             ],
             [
-              50.3956,
-              19.6433
+              50.3912,
+              19.6102
             ],
             [
               50.3421,
@@ -11272,12 +11588,9 @@
         },
         {
           "id": "aon-d5",
-          "dayNumber": 5,
-          "shortLabel": "Dzień 5 (22.06)",
-          "name": "Dzień 5: Klucze → Olkusz → Rabsztyn → Pieskowa Skała",
-          "dayLabel": "22.06 · ok. 25 km · +310 m",
-          "description": "Od srebrnego Olkusza i Zamku Rabsztyn do Doliny Prądnika i Maczugi Herkulesa.",
-          "color": "#0369A1",
+          "shortLabel": "Dzień 5: Pustynia Błędowska → Pieskowa Skała",
+          "name": "Dzień 5: Pustynia Błędowska → Olkusz → Rabsztyn → Pieskowa Skała",
+          "color": "#065F46",
           "waypoints": [
             [
               50.3421,
@@ -11285,11 +11598,11 @@
             ],
             [
               50.2801,
-              19.5639
+              19.5638
             ],
             [
-              50.2989,
-              19.5931
+              50.2982,
+              19.5912
             ],
             [
               50.2439,
@@ -11299,20 +11612,17 @@
         },
         {
           "id": "aon-d6",
-          "dayNumber": 6,
-          "shortLabel": "Dzień 6 (23.06)",
-          "name": "Dzień 6: Pieskowa Skała → Ojców (Dzień Ojca)",
-          "dayLabel": "23.06 (Dzień Ojca) · ok. 18 km · +210 m",
-          "description": "Przez Grodzisko i Bramę Krakowską do Ojcowa na nocleg i czuwanie w Dzień Ojca.",
-          "color": "#9A3412",
+          "shortLabel": "Dzień 6: Pieskowa Skała → Ojców (Dzień Ojca)",
+          "name": "Dzień 6: Pieskowa Skała → Ojców (Dolina Prądnika, Brama Krakowska)",
+          "color": "#15803d",
           "waypoints": [
             [
               50.2439,
               19.7828
             ],
             [
-              50.2289,
-              19.8242
+              50.2245,
+              19.8112
             ],
             [
               50.2106,
@@ -11322,12 +11632,9 @@
         },
         {
           "id": "aon-d7",
-          "dayNumber": 7,
-          "shortLabel": "Dzień 7 (24.06)",
-          "name": "Dzień 7: Ojców → Wawel → Łagiewniki",
-          "dayLabel": "24.06 · ok. 26 km · +190 m",
-          "description": "Przez Korzkiew i Wawel do Sanktuarium Bożego Miłosierdzia w Krakowie-Łagiewnikach.",
-          "color": "#B91C1C",
+          "shortLabel": "Dzień 7: Ojców → Łagiewniki",
+          "name": "Dzień 7: Ojców → Zielonki → Wawel → Kraków-Łagiewniki (Sanktuarium Miłosierdzia Bożego)",
+          "color": "#b91c1c",
           "waypoints": [
             [
               50.2106,
@@ -11335,11 +11642,11 @@
             ],
             [
               50.1583,
-              19.8833
+              19.8821
             ],
             [
-              50.0833,
-              19.9167
+              50.1189,
+              19.9234
             ],
             [
               50.054,
@@ -11350,118 +11657,312 @@
               19.9377
             ]
           ]
+        },
+        {
+          "id": "aon-ret1",
+          "shortLabel": "Powrót 1: Łagiewniki → Chrzanów",
+          "name": "Powrót 1: Łagiewniki → Tyniec → Alwernia → Chrzanów",
+          "color": "#0f766e",
+          "waypoints": [
+            [
+              50.0197,
+              19.9377
+            ],
+            [
+              50.0189,
+              19.8025
+            ],
+            [
+              50.0633,
+              19.5375
+            ],
+            [
+              50.1386,
+              19.4022
+            ]
+          ]
+        },
+        {
+          "id": "aon-ret2",
+          "shortLabel": "Powrót 2: Chrzanów → Kochłowice",
+          "name": "Powrót 2: Chrzanów → Jaworzno → Mysłowice → Kościół Trójcy Świętej w Kochłowicach",
+          "color": "#0f766e",
+          "waypoints": [
+            [
+              50.1386,
+              19.4022
+            ],
+            [
+              50.2045,
+              19.2731
+            ],
+            [
+              50.2415,
+              19.1415
+            ],
+            [
+              50.2547,
+              18.8936
+            ]
+          ]
+        },
+        {
+          "id": "aon-ret3",
+          "shortLabel": "Finał: Kochłowice → Dom",
+          "name": "Finał: Kościół Trójcy Świętej w Kochłowicach → Powrót do Domu",
+          "color": "#065F46",
+          "waypoints": [
+            [
+              50.2547,
+              18.8936
+            ],
+            [
+              50.2525,
+              18.8895
+            ]
+          ]
         }
       ],
       "pois": [
         {
-          "id": "aon-p1",
+          "id": "poi-home-start",
+          "name": "Dom Pielgrzyma (Początek Pielgrzymki)",
+          "stageIds": [
+            "aon-start"
+          ],
+          "lat": 50.2525,
+          "lng": 18.8895,
+          "category": "start",
+          "categoryLabel": "Dom / Początek",
+          "description": "Błogosławieństwo domowe i wyjście na Szlak Pielgrzyma ku Kościołowi Trójcy Świętej.",
+          "prayerTitle": "Modlitwa na wyjście z domu",
+          "prayerText": "Panie Boże, pobłogosław mój dom i moje drogi. Spraw, abym szedł w Twoim pokoju i powrócił umocniony wiarą."
+        },
+        {
+          "id": "poi-kochlowice-start",
+          "name": "Kościół Trójcy Świętej w Kochłowicach (Start Pętli)",
+          "stageIds": [
+            "aon-start",
+            "aon-dojscie"
+          ],
+          "lat": 50.2547,
+          "lng": 18.8936,
+          "category": "church",
+          "categoryLabel": "Świątynia Stacyjna",
+          "description": "Historyczny neoromański kościół parafialny Trójcy Przenajświętszej w Rudzie Śląskiej - Kochłowicach. Miejsce zawiązania pielgrzymki.",
+          "prayerTitle": "Modlitwa do Trójcy Przenajświętszej",
+          "prayerText": "Bądź uwielbiony, Boże w Trójcy Jedyny: Ojcze, Synu i Duchu Święty. Prowadź nas bezpiecznie do Jasnej Góry i Łagiewnik."
+        },
+        {
+          "id": "poi-piekary",
+          "name": "Bazylika NMP w Piekarach Śląskich",
+          "stageIds": [
+            "aon-dojscie"
+          ],
+          "lat": 50.3806,
+          "lng": 18.9478,
+          "category": "sanctuary",
+          "categoryLabel": "Sanktuarium",
+          "description": "Sanktuarium Matki Sprawiedliwości i Miłości Społecznej w Piekarach Śląskich – duchowe serce Śląska.",
+          "prayerTitle": "Modlitwa Piekarska",
+          "prayerText": "Matko Boska Piekarska, orędowniczko ludzi pracy i pielgrzymów, módl się za nami."
+        },
+        {
+          "id": "poi-jasna-gora",
+          "name": "Jasna Góra — Klasztor Paulinów (Częstochowa)",
+          "stageIds": [
+            "aon-dojscie",
+            "aon-d1",
+            "aon-ray-rome",
+            "aon-ray-gdansk",
+            "aon-ray-wroclaw",
+            "aon-ray-vilnius",
+            "aon-ray-warszawa",
+            "aon-ray-zakopane",
+            "aon-ray-lublin"
+          ],
+          "lat": 50.8122,
+          "lng": 19.0975,
+          "category": "sanctuary",
+          "categoryLabel": "Sanktuarium Narodowe",
+          "description": "Duchowa stolica Polski, Cudowny Obraz Matki Bożej Jasnogórskiej. Miejsce zjednoczenia wszystkich promieni pielgrzymów z Polski i świata.",
+          "prayerTitle": "Akt Zawierzenia na Jasnej Górze",
+          "prayerText": "Jestem przy Tobie, pamiętam, czuwam. Królowo Polski, powierzam Ci naszą jurajską drogę do Bożego Miłosierdzia."
+        },
+        {
+          "id": "poi-olsztyn",
+          "name": "Zamek Królewski w Olsztynie",
           "stageIds": [
             "aon-d1"
           ],
-          "name": "Jasna Góra (Start Szlaku Orlich Gniazd)",
-          "category": "start_meta",
-          "categoryLabel": "Start / Meta",
-          "time": "07:00",
-          "lat": 50.8122,
-          "lng": 19.0975,
-          "description": "Błogosławieństwo na Wałach Jasnej Góry przed wspólnym wejściem na Jurę.",
-          "prayerTitle": "Modlitwa na zjednoczenie",
-          "prayerText": "Królowo Polski, prowadź nasze zjednoczone grupy ku Miłosierdziu Bożemu."
+          "lat": 50.7501,
+          "lng": 19.2743,
+          "category": "poi",
+          "categoryLabel": "Zamek / Ostańce",
+          "description": "Majestatyczne ruiny XIV-wiecznego zamku kazimierzowskiego górujące nad jurajskimi wzgórzami.",
+          "prayerTitle": "Modlitwa o wierność i męstwo",
+          "prayerText": "Panie, bądź naszą opoką i warownią, w której chronimy się przed burzami życia."
         },
         {
-          "id": "aon-p2",
-          "stageIds": [
-            "aon-d1",
-            "aon-d2"
-          ],
-          "name": "Złoty Potok — Nocleg i Woda",
-          "category": "water",
-          "categoryLabel": "Postój / Woda",
-          "time": "16:30",
-          "lat": 50.7093,
-          "lng": 19.4347,
-          "description": "Zakończenie Dnia 1 przy Pałacu Raczyńskich i źródłach w Złotym Potoku.",
-          "prayerTitle": "Rozważanie o źródle",
-          "prayerText": "Dziękujemy Ci, Panie, za wodę żywą i piękno jurajskich lasów."
-        },
-        {
-          "id": "aon-p3",
+          "id": "poi-bobolice",
+          "name": "Zamek Bobolice i Mirów",
           "stageIds": [
             "aon-d2",
             "aon-d3"
           ],
-          "name": "Zamek Bobolice — Nocleg",
-          "category": "accommodation",
-          "categoryLabel": "Nocleg",
-          "time": "17:00",
           "lat": 50.6133,
           "lng": 19.4936,
-          "description": "Wieczorna adoracja i nocleg pod królewskimi basztami Bobolic.",
-          "prayerTitle": "Modlitwa o pokój",
-          "prayerText": "Panie, buduj nasze życie na skale Twojego słowa."
+          "category": "poi",
+          "categoryLabel": "Zamek Orlich Gniazd",
+          "description": "Odbudowana warownia królewska i Grzęda Mirowska – serce jurajskiego szlaku.",
+          "prayerTitle": "Rozważanie na szlaku",
+          "prayerText": "Panie, który stworzyłeś piękno skał i ziemi, odnów w nas ducha braterstwa i pokoju."
         },
         {
-          "id": "aon-p4",
+          "id": "poi-ogrodzieniec",
+          "name": "Zamek Ogrodzieniec (Góra Janowskiego)",
           "stageIds": [
             "aon-d3",
             "aon-d4"
           ],
-          "name": "Zamek Ogrodzieniec (Podzamcze)",
-          "category": "church",
-          "categoryLabel": "Czuwanie",
-          "time": "18:00",
           "lat": 50.4533,
           "lng": 19.5528,
-          "description": "Nocne czuwanie modlitewne u stóp zamku w Podzamczu.",
-          "prayerTitle": "Uwielbienie na skale",
-          "prayerText": "Twierdzą naszą i ucieczką jest Bóg!"
+          "category": "poi",
+          "categoryLabel": "Twierdza Jurajska",
+          "description": "Najpotężniejszy zamek Jury Krakowsko-Częstochowskiej w Podzamczu, 515 m n.p.m.",
+          "prayerTitle": "Modlitwa w drodze",
+          "prayerText": "Boże wszechmogący, niech żaden trud pielgrzymi nie osłabi w nas pragnienia dobra."
         },
         {
-          "id": "aon-p5",
+          "id": "poi-bledowska",
+          "name": "Pustynia Błędowska — Róża Wiatrów (Klucze)",
           "stageIds": [
             "aon-d4",
             "aon-d5"
           ],
-          "name": "Pustynia Błędowska (Klucze)",
-          "category": "medical",
-          "categoryLabel": "Punkt Medyczny",
-          "time": "15:00",
           "lat": 50.3421,
           "lng": 19.5672,
-          "description": "Punkt medyczny, nawodnienie oraz Msza św. na skraju Pustyni Błędowskiej.",
-          "prayerTitle": "Modlitwa na pustyni",
-          "prayerText": "Wyprowadzę cię na pustynię i będę mówił do twego serca."
+          "category": "poi",
+          "categoryLabel": "Przesilenie / Pustynia",
+          "description": "Polska Sahara – największy w Europie obszar piasków lotnych. Miejsce ciszy, skupienia i modlitwy pustyni.",
+          "prayerTitle": "Modlitwa w milczeniu pustyni",
+          "prayerText": "Panie, który wyprowadzasz Swój lud na pustynię, by mówić do jego serca – ucisz nasze myśli i mów do nas."
         },
         {
-          "id": "aon-p6",
+          "id": "poi-pieskowa-skala",
+          "name": "Zamek Pieskowa Skała i Maczuga Herkulesa",
           "stageIds": [
             "aon-d5",
             "aon-d6"
           ],
-          "name": "Pieskowa Skała i Ojców (Dzień Ojca)",
-          "category": "accommodation",
-          "categoryLabel": "Nocleg",
-          "time": "17:30",
-          "lat": 50.2106,
-          "lng": 19.8294,
-          "description": "Nocleg w Ojcowie 23.06 z modlitwą za ojców pod Bramą Krakowską.",
-          "prayerTitle": "Modlitwa w Dzień Ojca",
-          "prayerText": "Błogosław, Ojcze Niebieski, wszystkim ojcom ziemskim i rodzinom."
+          "lat": 50.2439,
+          "lng": 19.7828,
+          "category": "poi",
+          "categoryLabel": "Zamek / Przyroda",
+          "description": "Renesansowy zamek nad Doliną Prądnika i charakterystyczna wapienna Maczuga Herkulesa.",
+          "prayerTitle": "Modlitwa o mądrość",
+          "prayerText": "Spraw, Panie, abyśmy wspaniałość stworzenia widzieli oczyma wdzięczności i szacunku."
         },
         {
-          "id": "aon-p7",
+          "id": "poi-ojcow",
+          "name": "Ojców — Dolina Prądnika i Brama Krakowska (Dzień Ojca)",
+          "stageIds": [
+            "aon-d6",
+            "aon-d7"
+          ],
+          "lat": 50.2106,
+          "lng": 19.8294,
+          "category": "poi",
+          "categoryLabel": "Dzień Ojca",
+          "description": "Ojcowski Park Narodowy. Nocleg i czuwanie modlitewne w Dniu Ojca pośród malowniczych wąwozów.",
+          "prayerTitle": "Modlitwa za Ojców",
+          "prayerText": "Ojcze nasz, który jesteś w niebie, pobłogosław wszystkim ojcom i rodzinom, ucząc ich ofiarnej miłości."
+        },
+        {
+          "id": "poi-wawel",
+          "name": "Kraków — Wzgórze Wawelskie i Katedra",
           "stageIds": [
             "aon-d7"
           ],
-          "name": "Sanktuarium Bożego Miłosierdzia w Łagiewnikach",
-          "category": "start_meta",
-          "categoryLabel": "Start / Meta",
-          "time": "15:00",
+          "lat": 50.054,
+          "lng": 19.9354,
+          "category": "church",
+          "categoryLabel": "Katedra / Relikwie",
+          "description": "Katedra św. Stanisława i św. Wacława na Wawelu – serce polskiej historii i grób św. Stanisława.",
+          "prayerTitle": "Modlitwa za Ojczyznę",
+          "prayerText": "Święty Stanisławie, patronie Polski i jedności, wstawiaj się za nami u Boga."
+        },
+        {
+          "id": "poi-lagiewniki",
+          "name": "Kraków-Łagiewniki — Sanktuarium Bożego Miłosierdzia",
+          "stageIds": [
+            "aon-d7",
+            "aon-ret1"
+          ],
           "lat": 50.0197,
           "lng": 19.9377,
-          "description": "Finałowe wejście do Łagiewnik na Godzinę Miłosierdzia i Mszę Te Deum.",
-          "prayerTitle": "Akt Zawierzenia",
-          "prayerText": "Jezu, ufam Tobie!"
+          "category": "sanctuary",
+          "categoryLabel": "Cel Pielgrzymki",
+          "description": "Światowe Centrum Kultu Bożego Miłosierdzia, grób św. Faustyny Kowalskiej i Sanktuarium św. Jana Pawła II. Zwieńczenie marszu Szlakiem Orlich Gniazd.",
+          "prayerTitle": "Koronka do Bożego Miłosierdzia",
+          "prayerText": "Dla Jego bolesnej męki, miej miłosierdzie dla nas i całego świata. Jezu, ufam Tobie!"
+        },
+        {
+          "id": "poi-tyniec",
+          "name": "Opactwo Benedyktynów w Tyńcu",
+          "stageIds": [
+            "aon-ret1"
+          ],
+          "lat": 50.0189,
+          "lng": 19.8025,
+          "category": "church",
+          "categoryLabel": "Klasztor / Wisła",
+          "description": "Najstarszy istniejący klasztor w Polsce, założony w 1044 r. na wapiennym wzgórzu nad Wisłą.",
+          "prayerTitle": "Ora et Labora",
+          "prayerText": "Módl się i pracuj. Panie, uświęcaj naszą codzienność i daj nam pokój serca."
+        },
+        {
+          "id": "poi-alwernia",
+          "name": "Klasztor Bernardynów w Alwerni",
+          "stageIds": [
+            "aon-ret1"
+          ],
+          "lat": 50.0633,
+          "lng": 19.5375,
+          "category": "church",
+          "categoryLabel": "Klasztor Franciszkański",
+          "description": "Malowniczo położony klasztor ufundowany na wzór włoskiej La Verny, gdzie św. Franciszek otrzymał stygmaty.",
+          "prayerTitle": "Modlitwa o Pokój św. Franciszka",
+          "prayerText": "O Panie, uczyń ze mnie narzędzie Twojego pokoju: tam, gdzie jest nienawiść, niech sieję miłość."
+        },
+        {
+          "id": "poi-kochlowice-return",
+          "name": "Kościół Trójcy Świętej w Kochłowicach (Powrót Pielgrzymki)",
+          "stageIds": [
+            "aon-ret2",
+            "aon-ret3"
+          ],
+          "lat": 50.2547,
+          "lng": 18.8936,
+          "category": "church",
+          "categoryLabel": "Domowa Świątynia",
+          "description": "Uroczysty powrót do Kościoła Trójcy Świętej w Kochłowicach i podziękowanie za owoce pielgrzymki.",
+          "prayerTitle": "Te Deum — Ciebie, Boże, wysławiamy",
+          "prayerText": "Ciebie, Boże, chwalimy, Ciebie, Panie, wysławiamy. Dzięki za dar drogi, opiekę i szczęśliwy powrót."
+        },
+        {
+          "id": "poi-home-end",
+          "name": "Dom Pielgrzyma (Szczęśliwy Powrót do Domu)",
+          "stageIds": [
+            "aon-ret3"
+          ],
+          "lat": 50.2525,
+          "lng": 18.8895,
+          "category": "start",
+          "categoryLabel": "Dom / Spełnienie",
+          "description": "Szczęśliwy powrót do domu i swoich bliskich z darem i orędziem Bożego Miłosierdzia.",
+          "prayerTitle": "Błogosławieństwo domowe",
+          "prayerText": "Pokój temu domowi i wszystkim jego mieszkańcom. Niech Boże Miłosierdzie mieszka w nas na zawsze."
         }
       ]
     },
@@ -11469,23 +11970,28 @@
       "id": "via-air",
       "shortName": "Via Air 365",
       "name": "Via Air — Via Trinitatis 365 (Pure Walk)",
-      "subtitle": "Kochłowice – Jasna Góra – Santiago – Watykan – Jerozolima (via-air.pages.dev)",
-      "accentColor": "#1E3A8A",
-      "gpxFileName": "via-trinitatis-365.gpx",
-      "description": "365-dniowa, w 100% piesza wyprawa z Kochłowic przez Jasną Górę, Camino de Santiago, Via Francigena do Watykanu i lądem do Jerozolimy oraz z powrotem.",
+      "subtitle": "Dom → Kochłowice → Częstochowa → Łagiewniki → Kochłowice → Santiago → Rzym → Jerozolima → Dom",
+      "accentColor": "#1e3a8a",
+      "gpxFileName": "via-air-365-pure-walk.gpx",
+      "description": "Wielka 365-dniowa, w 100% piesza ekspedycja trynitarna: rozpoczynająca się w Domu i Kościele Trójcy Świętej w Kochłowicach, przez Częstochowę, Łagiewniki, powrót do Kochłowic (Faza I), następnie szlakiem Via Regia do Santiago de Compostela (Faza II), szlakiem Via Francigena do Watykanu (Faza III), w 100% lądem pieszo przez Bałkany i Anatolię do Bazyliki Grobu Pańskiego w Jerozolimie (Faza IV), oraz powrót przez Turcję, Bułgarię, Serbię, Węgry i Słowację z powrotem do Kościoła Trójcy Świętej w Kochłowicach i do Domu (Faza V).",
       "stages": [
         {
           "id": "via-f1",
-          "dayNumber": 1,
-          "shortLabel": "Faza I: Polska",
-          "name": "Faza I (Dni 1–14): Pętla Polska",
-          "dayLabel": "Kochłowice → Jasna Góra → Łagiewniki → Kochłowice",
-          "description": "Start w Kochłowicach przez Tarnowskie Góry, Jasną Górę (18.06), Pustynię Błędowską, Ojców i Łagiewniki.",
-          "color": "#CA8A04",
+          "shortLabel": "Faza I: Pętla Polska",
+          "name": "Faza I (Dni 1–14): Pętla Polska (Dom → Kochłowice → Częstochowa → Łagiewniki → Kochłowice → Dom)",
+          "color": "#eab308",
           "waypoints": [
+            [
+              50.2525,
+              18.8895
+            ],
             [
               50.2547,
               18.8936
+            ],
+            [
+              50.3806,
+              18.9478
             ],
             [
               50.4442,
@@ -11496,36 +12002,81 @@
               18.8553
             ],
             [
-              50.8125,
-              19.0972
+              50.7425,
+              18.8594
+            ],
+            [
+              50.8122,
+              19.0975
+            ],
+            [
+              50.7093,
+              19.4347
+            ],
+            [
+              50.6133,
+              19.4936
             ],
             [
               50.4533,
               19.5528
             ],
             [
+              50.3421,
+              19.5672
+            ],
+            [
+              50.2439,
+              19.7828
+            ],
+            [
               50.2106,
               19.8294
+            ],
+            [
+              50.054,
+              19.9354
             ],
             [
               50.0197,
               19.9377
             ],
             [
+              50.0189,
+              19.8025
+            ],
+            [
+              50.0633,
+              19.5375
+            ],
+            [
+              50.1386,
+              19.4022
+            ],
+            [
+              50.2045,
+              19.2731
+            ],
+            [
               50.2547,
               18.8936
+            ],
+            [
+              50.2525,
+              18.8895
             ]
           ]
         },
         {
           "id": "via-f2",
-          "dayNumber": 2,
-          "shortLabel": "Faza II: Camino",
-          "name": "Faza II (Dni 15–135): Via Regia & Camino de Santiago",
-          "dayLabel": "Kochłowice → Piekary → Görlitz → Paryż → Santiago",
-          "description": "Pieszy marsz szlakiem Via Regia przez Polskę, Niemcy i Francję aż do grobu św. Jakuba w Santiago de Compostela.",
-          "color": "#1E3A8A",
+          "shortLabel": "Faza II: Camino Santiago",
+          "name": "Faza II (Dni 15–135): Via Regia & Camino de Santiago (Kochłowice → Santiago de Compostela)",
+          "color": "#1e3a8a",
           "waypoints": [
+            [
+              50.2525,
+              18.8895
+            ],
             [
               50.2547,
               18.8936
@@ -11535,51 +12086,140 @@
               18.9478
             ],
             [
-              51.1506,
+              50.4567,
+              18.1672
+            ],
+            [
+              51.1144,
+              17.0462
+            ],
+            [
+              51.1528,
               14.9872
+            ],
+            [
+              51.0504,
+              13.7373
             ],
             [
               51.3397,
               12.3731
             ],
             [
-              48.8566,
-              2.3522
+              50.9848,
+              11.0299
+            ],
+            [
+              50.5558,
+              9.6808
+            ],
+            [
+              50.1109,
+              8.6821
+            ],
+            [
+              49.1193,
+              6.1757
+            ],
+            [
+              49.2583,
+              4.0317
+            ],
+            [
+              48.8579,
+              2.3489
+            ],
+            [
+              47.3941,
+              0.6848
+            ],
+            [
+              46.5802,
+              0.3404
+            ],
+            [
+              44.8378,
+              -0.5792
             ],
             [
               43.1631,
-              -1.2361
+              -1.2381
             ],
             [
-              42.8805,
-              -8.5446
+              42.8125,
+              -1.6458
+            ],
+            [
+              42.3439,
+              -3.6969
+            ],
+            [
+              42.5987,
+              -5.5671
+            ],
+            [
+              42.8806,
+              -8.5444
             ]
           ]
         },
         {
           "id": "via-f3",
-          "dayNumber": 3,
-          "shortLabel": "Faza III: Rzym",
-          "name": "Faza III (Dni 136–225): Via Francigena do Watykanu",
-          "dayLabel": "Santiago → Arles → Alpy → Siena → Watykan",
-          "description": "Przejście z Hiszpanii przez południową Francję i Alpy włoską Via Francigena na Plac św. Piotra.",
-          "color": "#2563EB",
+          "shortLabel": "Faza III: Do Watykanu",
+          "name": "Faza III (Dni 136–225): Via Francigena do Watykanu (Santiago → Watykan / Rzym)",
+          "color": "#2563eb",
           "waypoints": [
             [
-              42.8805,
-              -8.5446
+              42.8806,
+              -8.5444
+            ],
+            [
+              43.3619,
+              -5.8494
+            ],
+            [
+              43.263,
+              -2.935
+            ],
+            [
+              43.0915,
+              -0.0457
+            ],
+            [
+              43.6047,
+              1.4442
+            ],
+            [
+              43.6108,
+              3.8767
             ],
             [
               43.6766,
               4.6278
             ],
             [
-              45.8696,
-              7.1695
+              44.9311,
+              6.7239
+            ],
+            [
+              45.0703,
+              7.6869
+            ],
+            [
+              45.0526,
+              9.693
+            ],
+            [
+              43.8429,
+              10.5027
             ],
             [
               43.3188,
               11.3308
+            ],
+            [
+              42.4207,
+              12.1077
             ],
             [
               41.9022,
@@ -11589,12 +12229,9 @@
         },
         {
           "id": "via-f4",
-          "dayNumber": 4,
-          "shortLabel": "Faza IV: Jerozolima",
-          "name": "Faza IV (Dni 226–290): Rzym → Jerozolima (100% lądem)",
-          "dayLabel": "Watykan → Asyż → Triest → Saloniki → Stambuł → Jerozolima",
-          "description": "Trasa wyłącznie lądowa (0% promów) przez Bałkany, Bosfor i Anatolię do Ziemi Świętej.",
-          "color": "#0F766E",
+          "shortLabel": "Faza IV: Rzym → Jerozolima",
+          "name": "Faza IV (Dni 226–290): Rzym → Jerozolima (100% lądem pieszo)",
+          "color": "#ca8a04",
           "waypoints": [
             [
               41.9022,
@@ -11605,8 +12242,24 @@
               12.6196
             ],
             [
+              44.0678,
+              12.5695
+            ],
+            [
               45.6495,
               13.7768
+            ],
+            [
+              43.5081,
+              16.4402
+            ],
+            [
+              42.6507,
+              18.0944
+            ],
+            [
+              41.3275,
+              19.8187
             ],
             [
               40.6401,
@@ -11617,8 +12270,20 @@
               28.9784
             ],
             [
+              37.8746,
+              32.4932
+            ],
+            [
+              37,
+              35.3213
+            ],
+            [
               36.2021,
               36.1605
+            ],
+            [
+              32.6996,
+              35.3035
             ],
             [
               31.7785,
@@ -11628,16 +12293,21 @@
         },
         {
           "id": "via-f5",
-          "dayNumber": 5,
-          "shortLabel": "Faza V: Powrót",
-          "name": "Faza V (Dni 291–365): Powrót Bałkanami do Kochłowic",
-          "dayLabel": "Jerozolima → Ankara → Sofia → Budapeszt → Kochłowice",
-          "description": "Powrót pieszy przez Turcję, Bułgarię, Serbię, Węgry i Słowację na zamknięcie 365-dniowej pętli.",
-          "color": "#6D28D9",
+          "shortLabel": "Faza V: Powrót do Domu",
+          "name": "Faza V (Dni 291–365): Powrót Bałkanami do Kochłowic i Domu",
+          "color": "#0f766e",
           "waypoints": [
             [
               31.7785,
               35.2296
+            ],
+            [
+              32.7922,
+              35.5312
+            ],
+            [
+              37.0662,
+              37.3833
             ],
             [
               39.9334,
@@ -11652,81 +12322,180 @@
               23.3219
             ],
             [
+              44.7866,
+              20.4489
+            ],
+            [
               47.4979,
               19.0402
             ],
             [
+              48.7363,
+              19.1462
+            ],
+            [
+              49.2231,
+              18.7394
+            ],
+            [
+              49.7493,
+              18.6332
+            ],
+            [
               50.2547,
               18.8936
+            ],
+            [
+              50.2525,
+              18.8895
             ]
           ]
         }
       ],
       "pois": [
         {
-          "id": "via-p1",
+          "id": "poi-via-home-start",
+          "name": "Dom Pielgrzyma w Kochłowicach (Start 365)",
           "stageIds": [
-            "via-f1",
-            "via-f2",
-            "via-f5"
+            "via-f1"
           ],
-          "name": "Kochłowice — Kościół Trójcy Świętej",
-          "category": "start_meta",
-          "categoryLabel": "Start / Meta",
-          "time": "06:00",
-          "lat": 50.2547,
-          "lng": 18.8936,
-          "description": "Punkt 0 i 365. dzień wyprawy Via Trinitatis 365.",
-          "prayerTitle": "Modlitwa Trójcy Świętej",
-          "prayerText": "Chwała Ojcu i Synowi, i Duchowi Świętemu na każdym kilometrze drogi."
+          "lat": 50.2525,
+          "lng": 18.8895,
+          "category": "start",
+          "categoryLabel": "Dom Pielgrzyma",
+          "description": "Początek 365-dniowej, w 100% pieszej wyprawy dookoła Europy i Bliskiego Wschodu.",
+          "prayerTitle": "Błogosławieństwo na 365 Dni Marszu",
+          "prayerText": "W Twoje ręce, Panie, powierzam każdy krok mojej rocznej drogi."
         },
         {
-          "id": "via-p2",
+          "id": "poi-via-kochlowice-1",
+          "name": "Kościół Trójcy Świętej w Kochłowicach (Wizyta I — Start)",
+          "stageIds": [
+            "via-f1"
+          ],
+          "lat": 50.2547,
+          "lng": 18.8936,
+          "category": "church",
+          "categoryLabel": "Wizyta I",
+          "description": "Start Pętli Polskiej – 14 czerwca 2026.",
+          "prayerTitle": "Invocatio Trinitatis",
+          "prayerText": "W Imię Ojca i Syna, i Ducha Świętego. Amen."
+        },
+        {
+          "id": "poi-via-jasna-gora",
+          "name": "Jasna Góra — Częstochowa (Dzień 5)",
+          "stageIds": [
+            "via-f1"
+          ],
+          "lat": 50.8122,
+          "lng": 19.0975,
+          "category": "sanctuary",
+          "categoryLabel": "Jasna Góra",
+          "description": "Pokłon Królowej Polski przed wyruszeniem na jurajski szlak.",
+          "prayerTitle": "Apel Jasnogórski",
+          "prayerText": "Maryjo, Królowo Polski, prowadź nas w pielgrzymce wiary."
+        },
+        {
+          "id": "poi-via-lagiewniki",
+          "name": "Kraków-Łagiewniki — Sanktuarium Bożego Miłosierdzia (Dzień 12)",
+          "stageIds": [
+            "via-f1"
+          ],
+          "lat": 50.0197,
+          "lng": 19.9377,
+          "category": "sanctuary",
+          "categoryLabel": "Łagiewniki",
+          "description": "Serce Bożego Miłosierdzia w Krakowie-Łagiewnikach.",
+          "prayerTitle": "Akt Zawierzenia Świata Bożemu Miłosierdziu",
+          "prayerText": "Jezu, ufam Tobie! Bądź z nami na wszystkich szlakach świata."
+        },
+        {
+          "id": "poi-via-kochlowice-2",
+          "name": "Kościół Trójcy Świętej w Kochłowicach (Wizyta II — Koniec Fazy I)",
+          "stageIds": [
+            "via-f1",
+            "via-f2"
+          ],
+          "lat": 50.2547,
+          "lng": 18.8936,
+          "category": "church",
+          "categoryLabel": "Wizyta II",
+          "description": "Zamknięcie Pętli Polskiej (Dzień 14) i uroczyste wyruszenie na Camino de Santiago (Dzień 15).",
+          "prayerTitle": "Dziękczynienie za Pętlę Polską",
+          "prayerText": "Dziękujemy, Trójco Przenajświętsza, za pierwsze 14 dni marszu. Prowadź nas do grobu św. Jakuba."
+        },
+        {
+          "id": "poi-via-santiago",
+          "name": "Santiago de Compostela — Katedra św. Jakuba (Dzień 135)",
           "stageIds": [
             "via-f2",
             "via-f3"
           ],
-          "name": "Katedra w Santiago de Compostela",
-          "category": "church",
-          "categoryLabel": "Kościół / Sanktuarium",
-          "time": "12:00",
-          "lat": 42.8805,
-          "lng": -8.5446,
-          "description": "Półmetek zachodniej drogi Camino Francés.",
-          "prayerTitle": "Modlitwa pielgrzyma św. Jakuba",
-          "prayerText": "Święty Jakubie, prowadź nas bezpiecznie ku Wiecznemu Miastu."
+          "lat": 42.8806,
+          "lng": -8.5444,
+          "category": "sanctuary",
+          "categoryLabel": "Koniec Fazy II",
+          "description": "Grób św. Jakuba Apostoła – cel wielowiekowego europejskiego szlaku Camino de Santiago.",
+          "prayerTitle": "Modlitwa Pielgrzyma do św. Jakuba",
+          "prayerText": "Święty Jakubie, orędowniku pątników, umocnij nas w drodze do Rzymu i Jerozolimy."
         },
         {
-          "id": "via-p3",
+          "id": "poi-via-watykan",
+          "name": "Watykan — Bazylika św. Piotra (Dzień 225)",
           "stageIds": [
             "via-f3",
             "via-f4"
           ],
-          "name": "Watykan — Bazylika św. Piotra",
-          "category": "church",
-          "categoryLabel": "Kościół / Sanktuarium",
-          "time": "12:00",
           "lat": 41.9022,
           "lng": 12.4539,
-          "description": "Przystanek apostolski w Rzymie przed drogą na Wschód.",
-          "prayerTitle": "Modlitwa o jedność Kościoła",
-          "prayerText": "Ty jesteś Piotr, Opoka, a na tej Opoce zbuduję Kościół mój."
+          "category": "sanctuary",
+          "categoryLabel": "Koniec Fazy III",
+          "description": "Serce Kościoła Powszechnego – Bazylika i Plac św. Piotra w Watykanie po przejściu Via Francigena.",
+          "prayerTitle": "Modlitwa u grobu św. Piotra",
+          "prayerText": "Panie, Ty wiesz, że Cię kocham. Umocnij naszą wiarę w drodze do Ziemi Świętej."
         },
         {
-          "id": "via-p4",
+          "id": "poi-via-jerozolima",
+          "name": "Jerozolima — Bazylika Grobu Pańskiego (Dzień 290)",
           "stageIds": [
             "via-f4",
             "via-f5"
           ],
-          "name": "Jerozolima — Bazylika Grobu Świętego",
-          "category": "start_meta",
-          "categoryLabel": "Ziemia Święta",
-          "time": "15:00",
           "lat": 31.7785,
           "lng": 35.2296,
-          "description": "Cel wschodni czysto lądowej wędrówki przed powrotem do Polski.",
-          "prayerTitle": "Modlitwa w Grobie Pańskim",
-          "prayerText": "Chrystus zmartwychwstał, prawdziwie zmartwychwstał!"
+          "category": "sanctuary",
+          "categoryLabel": "Koniec Fazy IV",
+          "description": "Najświętsze miejsce chrześcijaństwa – Bazylika Grobu i Zmartwychwstania Pańskiego, osiągnięta w 100% pieszo lądem.",
+          "prayerTitle": "Modlitwa przy Pustym Grobie",
+          "prayerText": "Chrystus Zmartwychwstał! Prawdziwie Zmartwychwstał! Niech Jego światło rozjaśnia całą ziemię."
+        },
+        {
+          "id": "poi-via-kochlowice-3",
+          "name": "Kościół Trójcy Świętej w Kochłowicach (Wizyta III — Wielki Finał)",
+          "stageIds": [
+            "via-f5"
+          ],
+          "lat": 50.2547,
+          "lng": 18.8936,
+          "category": "church",
+          "categoryLabel": "Wizyta III (Dzień 365)",
+          "description": "Zamknięcie 365-dniowej wielkiej pętli pieszej – 13 czerwca 2027.",
+          "prayerTitle": "Wielkie Te Deum Pielgrzyma",
+          "prayerText": "Bogu w Trójcy Jedynemu niech będzie chwała i cześć przez wszystkie wieki wieków. Dokonało się!"
+        },
+        {
+          "id": "poi-via-home-end",
+          "name": "Dom Pielgrzyma w Kochłowicach (Szczęśliwe Zwieńczenie 365 Dni)",
+          "stageIds": [
+            "via-f5"
+          ],
+          "lat": 50.2525,
+          "lng": 18.8895,
+          "category": "start",
+          "categoryLabel": "Dom / Finał",
+          "description": "Bezpieczny i pełen łaski powrót do domu po 365 dniach nieustannego marszu.",
+          "prayerTitle": "Błogosławieństwo Pielgrzyma",
+          "prayerText": "Błogosław, duszo moja, Pana, i całe moje wnętrze — święte imię Jego!"
         }
       ]
     }

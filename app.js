@@ -75,6 +75,7 @@
   let topoLayer = null;
   let stageLayerGroup = null;
   let approachLayerGroup = null;
+  let pilgrimWorldLayerGroup = null;
   let recordedHaloLine = null;
   let recordedLine = null;
   let poiLayerGroup = null;
@@ -314,6 +315,10 @@
     const h = Math.floor(totalMin / 60);
     const m = totalMin % 60;
     if (h === 0) return `ok. ${m} min`;
+    if (h >= 48) {
+      const days = Math.round(h / 7);
+      return `ok. ${days} dni marszu (${h} h)`;
+    }
     return `ok. ${h} h ${String(m).padStart(2, '0')} min`;
   }
 
@@ -519,6 +524,9 @@
         stage.waypoints.forEach((pt) => pts.push(pt));
       }
     });
+    if (STATE.selectedSectionId === 'mapa-aon' && STATE.userPosition && STATE.selectedStageId === 'all') {
+      pts.push([STATE.userPosition.lat, STATE.userPosition.lng]);
+    }
     return pts;
   }
 
@@ -560,6 +568,7 @@
     osmLayer.addTo(map);
     stageLayerGroup = L.layerGroup().addTo(map);
     approachLayerGroup = L.layerGroup().addTo(map);
+    pilgrimWorldLayerGroup = L.layerGroup().addTo(map);
     poiLayerGroup = L.layerGroup().addTo(map);
 
     map.on('dragstart', () => {
@@ -901,6 +910,7 @@
     rebuildDayManeuvers();
     renderRecordedTrackOnMap();
     renderApproachRouteOnMap();
+    updatePilgrimWorldLayer();
 
     if (shouldFit) {
       fitEntireRoute();
@@ -1027,6 +1037,8 @@
 
     if (preferredStageId && (preferredStageId === 'all' || STATE.stages.some((s) => s.id === preferredStageId))) {
       STATE.selectedStageId = preferredStageId;
+    } else if (sectionId === 'mapa-aon' || sectionId === 'via-air') {
+      STATE.selectedStageId = 'all';
     } else {
       STATE.selectedStageId = STATE.stages[0]?.id || 'all';
     }
@@ -1069,9 +1081,14 @@
     renderRouteAndPois(true);
   }
 
-  function fitEntireRoute() {
+  function fitEntireRoute(forceAll = false) {
     if (!map) return;
     setAutoFollow(false);
+    if (forceAll && STATE.selectedStageId !== 'all') {
+      STATE.selectedStageId = 'all';
+      saveSelectionState();
+      renderRouteAndPois(false);
+    }
     const pts = getActiveWaypointsCombined();
     if (pts.length >= 2) {
       map.fitBounds(L.latLngBounds(pts), { padding: [44, 44], maxZoom: 15 });
@@ -1258,6 +1275,73 @@
       dashArray: '8 8',
       opacity: 0.98
     }).addTo(approachLayerGroup);
+  }
+
+  function updatePilgrimWorldLayer() {
+    if (!pilgrimWorldLayerGroup || !map) return;
+    pilgrimWorldLayerGroup.clearLayers();
+
+    if (STATE.selectedSectionId !== 'mapa-aon' || !STATE.userPosition) return;
+
+    const userLat = STATE.userPosition.lat;
+    const userLng = STATE.userPosition.lng;
+    const jasnaGora = [50.8122, 19.0975];
+    const lagiewniki = [50.0197, 19.9377];
+
+    const distToJG = haversineMeters(userLat, userLng, jasnaGora[0], jasnaGora[1]);
+    if (distToJG > 350) {
+      // Contrast halo for inbound ray
+      L.polyline([[userLat, userLng], jasnaGora], {
+        color: '#ffffff',
+        weight: 7,
+        opacity: 0.85,
+        lineCap: 'round'
+      }).addTo(pilgrimWorldLayerGroup);
+
+      // Inbound dynamic ray: User GPS -> Częstochowa (Jasna Góra)
+      const inboundRay = L.polyline([[userLat, userLng], jasnaGora], {
+        color: '#0284c7',
+        weight: 4,
+        dashArray: '8 8',
+        opacity: 0.95,
+        lineCap: 'round'
+      }).addTo(pilgrimWorldLayerGroup);
+      inboundRay.bindTooltip(`Twoje dojście ze świata do Jasnej Góry (${formatDistance(distToJG)})`, {
+        sticky: true
+      });
+
+      // Contrast halo for return ray
+      L.polyline([lagiewniki, [userLat, userLng]], {
+        color: '#ffffff',
+        weight: 6,
+        opacity: 0.85,
+        lineCap: 'round'
+      }).addTo(pilgrimWorldLayerGroup);
+
+      // Outbound return ray: Kraków-Łagiewniki -> User starting position / home
+      const distFromLag = haversineMeters(lagiewniki[0], lagiewniki[1], userLat, userLng);
+      const returnRay = L.polyline([lagiewniki, [userLat, userLng]], {
+        color: '#10b981',
+        weight: 3.5,
+        dashArray: '6 8',
+        opacity: 0.92,
+        lineCap: 'round'
+      }).addTo(pilgrimWorldLayerGroup);
+      returnRay.bindTooltip(`Twój powrót z Łagiewnik do Twojego miejsca startu (${formatDistance(distFromLag)})`, {
+        sticky: true
+      });
+
+      // World pilgrim starting position marker
+      const startPin = L.divIcon({
+        className: 'poi-div-icon',
+        html: '<div class="poi-marker-pin" style="background:#0284c7;color:#ffffff;box-shadow:0 0 12px rgba(2,132,199,0.85);" title="Pielgrzym Świata — Twoja pozycja">🌍</div>',
+        iconSize: [34, 34],
+        iconAnchor: [17, 17]
+      });
+      L.marker([userLat, userLng], { icon: startPin, zIndexOffset: 750 })
+        .addTo(pilgrimWorldLayerGroup)
+        .bindPopup(`<b>Twoja pozycja startowa (Pielgrzym Świata)</b><br>1. Dojście do Częstochowy (Jasna Góra): <b>${formatDistance(distToJG)}</b><br>2. Szlak Orlich Gniazd (Pustynia Błędowska, Ojców) do Łagiewnik<br>3. Powrót z Łagiewnik do Ciebie / Domu: <b>${formatDistance(distFromLag)}</b>`);
+    }
   }
 
   function startDayNavigation() {
@@ -1638,6 +1722,7 @@ ${trkptsXml}
         renderTrackerUI();
         updateActiveNavigationHud();
         update3dGuideAndHeading();
+        updatePilgrimWorldLayer();
         updateWazeSyncState(false);
       },
       (err) => {
@@ -1676,6 +1761,7 @@ ${trkptsXml}
         updateNearestDioceseRecommendation(true);
         renderTelemetry();
         update3dGuideAndHeading();
+        updatePilgrimWorldLayer();
         updateWazeSyncState(false);
       },
       () => {
@@ -2321,8 +2407,8 @@ ${tracksXml}
     els.layerTopoBtn.addEventListener('click', () => switchBaseLayer('topo'));
     els.toggle3dBtn.addEventListener('click', () => set3dView(!STATE.is3dView));
     els.centerMeBtn.addEventListener('click', () => setAutoFollow(!STATE.autoFollow));
-    els.fitRouteBtn.addEventListener('click', fitEntireRoute);
-    els.navFitBtn.addEventListener('click', fitEntireRoute);
+    els.fitRouteBtn.addEventListener('click', () => fitEntireRoute(true));
+    els.navFitBtn.addEventListener('click', () => fitEntireRoute(true));
     els.navExportBtn.addEventListener('click', exportPlannedGpx);
     els.navOfflineBtn.addEventListener('click', openMenuModal);
 
